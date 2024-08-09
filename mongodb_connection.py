@@ -1,9 +1,12 @@
 from pymongo import MongoClient, errors
 import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Fetch MongoDB URI from environment variables
-MONGO_URI = os.getenv("mongodb+srv://Mayur:Mayur2002@cluster0.cemqecf.mongodb.net/InterShipPortal?retryWrites=true&w=majority&appName=Cluster0"
-)
+MONGO_URI = os.getenv("MONGODB_URI")
 
 def get_db():
     """
@@ -11,7 +14,7 @@ def get_db():
     """
     try:
         if MONGO_URI is None:
-            raise ValueError("MONGO_URI environment variable not set")
+            raise ValueError("MONGODB_URI environment variable not set")
 
         client = MongoClient(MONGO_URI)
         client.admin.command('ping')  # Check the connection
