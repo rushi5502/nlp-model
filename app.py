@@ -3,7 +3,8 @@ from bson.objectid import ObjectId
 from mongodb_connection import get_db
 import logging
 from skills_extractor import extract_text_from_pdf, extract_skills_from_text, match_skills  # Import functions
-import math
+import os
+
 app = Flask(__name__)
 
 # Set up logging
@@ -90,7 +91,7 @@ def get_post_by_id(postId):
                 matched_skills_per_resume[resume_url] = matched_skills
                 
                 # Calculate match percentage
-                match_percentage = round(calculate_match_percentage(matched_skills, required_skills),2)
+                match_percentage = round(calculate_match_percentage(matched_skills, required_skills), 2)
                 print(type(match_percentage))
                 print(match_percentage)
                 db['Application'].update_one(
@@ -111,4 +112,6 @@ def get_post_by_id(postId):
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Run the app on the port provided by Heroku
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=True)
